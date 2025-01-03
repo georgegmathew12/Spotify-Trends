@@ -10,4 +10,10 @@ class Config:
     CID = os.getenv('CID')
     SECRET = os.getenv('SECRET')
 
-print(os.getenv('DB_URI'))
+    @staticmethod
+    def validate_config():
+        """Ensure valid config variables are set"""
+        if not Config.SQLALCHEMY_DATABASE_URI:
+            raise ValueError("Database URI not set in .env")
+        if not Config.CID or not Config.SECRET:
+            raise ValueError("CID or SECRET not set in .env")
