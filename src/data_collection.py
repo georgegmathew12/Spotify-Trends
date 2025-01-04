@@ -16,6 +16,7 @@ auth_manager = SpotifyOAuth(
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
 def get_user_playlists(limit=20):
+    """Get user's playlists"""
     user = sp.current_user()
     user_id = user['id']
     results = sp.user_playlists(user=user_id, limit=limit)
@@ -28,3 +29,16 @@ def get_user_playlists(limit=20):
         for item in results['items']
     ]
     return playlists
+
+def get_user_saved_tracks(limit=20):
+    """Get user's saved tracks"""
+    results = sp.current_user_saved_tracks(limit=limit)
+    tracks = [
+        {
+            'name': item['track']['name'],
+            'artist': item['track']['artists'][0]['name'],
+            'album': item['track']['album']['name']
+        }
+        for item in results['items']
+    ]
+    return tracks

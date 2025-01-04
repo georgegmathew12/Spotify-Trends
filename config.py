@@ -6,7 +6,7 @@ load_dotenv() # Load environment vars from .env
 class Config:
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = os.getenv('DB_URI')
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
     @staticmethod
     def validate_config():
