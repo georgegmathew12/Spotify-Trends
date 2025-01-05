@@ -3,50 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>{{ user_profile['user']['display_name'] }}'s Profile</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts (Poppins for clean typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .profile-header img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+        .profile-header h1 {
+            font-size: 2.5em;
+            font-weight: 600;
+            color: #333;
+        }
+        .profile-header p {
+            color: #777;
+            font-size: 1.2em;
+        }
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
         .btn {
             padding: 10px 20px;
-            margin: 5px;
-            text-decoration: none;
-            color: white;
+            font-weight: 600;
             background-color: #007bff;
+            color: white;
             border-radius: 5px;
+            text-decoration: none;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
         }
         .selected {
             background-color: #28a745;
         }
+        .list-group-item {
+            background-color: transparent;
+            border: none;
+            padding: 10px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .list-group-item span {
+            color: #888;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-    <h1>{{ user_profile['user']['display_name'] }}'s Profile</h1>
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <img src="{{ user_profile['user']['profile_image'] }}" alt="Profile Image">
+            <div>
+                <h1>{{ user_profile['user']['display_name'] }}</h1>
+                <p><i class="fas fa-users"></i> Followers: {{ user_profile['user']['follower_count'] }}</p>
+            </div>
+        </div>
 
-    <div>
-        <img src="{{ user_profile['user']['profile_image'] }}" alt="Profile Image">
-        <p>Followers: {{ user_profile['user']['follower_count'] }}</p>
+        <!-- Time Range Selection -->
+        <div>
+            <a href="/?time_range=short_term" class="btn {% if time_range == 'short_term' %}selected{% endif %}">Last 4 weeks</a>
+            <a href="/?time_range=medium_term" class="btn {% if time_range == 'medium_term' %}selected{% endif %}">Last 6 months</a>
+            <a href="/?time_range=long_term" class="btn {% if time_range == 'long_term' %}selected{% endif %}">All-time</a>
+        </div>
+
+        <!-- Top Tracks -->
+        <div class="section-title">Top Tracks</div>
+        <ol class="list-group">
+            {% for track in user_profile['top_tracks'] %}
+                <li class="list-group-item">{{ loop.index }}. {{ track['name'] }} - {{ track['artist'] }} <span>({{ track['album'] }})</span></li>
+            {% endfor %}
+        </ol>
+
+        <!-- Top Artists -->
+        <div class="section-title">Top Artists</div>
+        <ol class="list-group">
+            {% for artist in user_profile['top_artists'] %}
+                <li class="list-group-item">{{ loop.index }}. {{ artist['name'] }} <span>({{ artist['popularity'] }})</span></li>
+            {% endfor %}
+        </ol>
+
+        <!-- Top Genres -->
+        <div class="section-title">Top Genres</div>
+        <ol class="list-group">
+            {% for genre, count in user_profile['top_genres'] %}
+                <li class="list-group-item">{{ loop.index }}. {{ genre }} <span>({{ count }} tracks)</span></li>
+            {% endfor %}
+        </ol>
     </div>
 
-    <!-- Time range selection buttons -->
-    <div>
-        <a href="/?time_range=short_term" class="btn {% if time_range == 'short_term' %}selected{% endif %}">Last 4 weeks</a>
-        <a href="/?time_range=medium_term" class="btn {% if time_range == 'medium_term' %}selected{% endif %}">Last 6 months</a>
-        <a href="/?time_range=long_term" class="btn {% if time_range == 'long_term' %}selected{% endif %}">All-time</a>
-    </div>
-
-    <!-- Display top tracks -->
-    <h2>Top Tracks</h2>
-    <ul>
-        {% for track in user_profile['top_tracks'] %}
-            <li>{{ track['name'] }} - {{ track['artist'] }} ({{ track['album'] }})</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Display top artists -->
-    <h2>Top Artists</h2>
-    <ul>
-        {% for artist in user_profile['top_artists'] %}
-            <li>{{ artist['name'] }} ({{ artist['popularity'] }})</li>
-        {% endfor %}
-    </ul>
+    <!-- Bootstrap and jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
