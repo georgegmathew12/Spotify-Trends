@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .user-profile, .top-section {
+            margin-bottom: 30px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-header img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+        .profile-header h2 {
+            margin: 0;
+        }
+        .track, .artist {
+            margin-bottom: 15px;
+        }
+        .track span, .artist span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .track small, .artist small {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- User Profile Section -->
+        <div class="user-profile">
+            <div class="profile-header">
+                <img src="{{ user_info.user.profile_image }}" alt="Profile Image">
+                <div>
+                    <h2>{{ user_info.user.display_name }}</h2>
+                    <p>Followers: {{ user_info.user.follower_count }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Tracks Section -->
+        <div class="top-section">
+            <h3>Top Tracks</h3>
+            {% for track in user_info.top_tracks %}
+            <div class="track">
+                <span>{{ track.name }}</span>
+                <small>by {{ track.artist }} (Album: {{ track.album }})</small>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Top Artists Section -->
+        <div class="top-section">
+            <h3>Top Artists</h3>
+            {% for artist in user_info.top_artists %}
+            <div class="artist">
+                <span>{{ artist.name }}</span>
+                <small>Genres: {{ artist.genres | join(', ') }}</small>
+                <small>Popularity: {{ artist.popularity }}</small>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
