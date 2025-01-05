@@ -4,26 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <style>
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+        .selected {
+            background-color: #28a745;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{ user_info['user']['display_name'] }}'s Profile</h1>
+    <h1>{{ user_profile['user']['display_name'] }}'s Profile</h1>
 
     <div>
-        <img src="{{ user_info['user']['profile_image'] }}" alt="Profile Image">
-        <p>Followers: {{ user_info['user']['follower_count'] }}</p>
+        <img src="{{ user_profile['user']['profile_image'] }}" alt="Profile Image">
+        <p>Followers: {{ user_profile['user']['follower_count'] }}</p>
     </div>
 
     <!-- Time range selection buttons -->
     <div>
-        <a href="/?time_range=short_term" class="btn {{ 'selected' if time_range == 'short_term' else '' }}">Last 4 weeks</a>
-        <a href="/?time_range=medium_term" class="btn {{ 'selected' if time_range == 'medium_term' else '' }}">Last 6 months</a>
-        <a href="/?time_range=long_term" class="btn {{ 'selected' if time_range == 'long_term' else '' }}">All-time</a>
+        <a href="/?time_range=short_term" class="btn {% if time_range == 'short_term' %}selected{% endif %}">Last 4 weeks</a>
+        <a href="/?time_range=medium_term" class="btn {% if time_range == 'medium_term' %}selected{% endif %}">Last 6 months</a>
+        <a href="/?time_range=long_term" class="btn {% if time_range == 'long_term' %}selected{% endif %}">All-time</a>
     </div>
 
     <!-- Display top tracks -->
     <h2>Top Tracks</h2>
     <ul>
-        {% for track in user_info['top_tracks'] %}
+        {% for track in user_profile['top_tracks'] %}
             <li>{{ track['name'] }} - {{ track['artist'] }} ({{ track['album'] }})</li>
         {% endfor %}
     </ul>
@@ -31,7 +44,7 @@
     <!-- Display top artists -->
     <h2>Top Artists</h2>
     <ul>
-        {% for artist in user_info['top_artists'] %}
+        {% for artist in user_profile['top_artists'] %}
             <li>{{ artist['name'] }} ({{ artist['popularity'] }})</li>
         {% endfor %}
     </ul>

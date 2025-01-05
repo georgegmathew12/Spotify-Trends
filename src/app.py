@@ -6,7 +6,7 @@ from flask import Flask, render_template, request
 from config import Config
 from database import db
 from models import Artist, Album, Track
-from data_collection import sp, get_user_info
+from data_collection import sp, get_user_profile
 
 def create_app():
     app = Flask(__name__)
@@ -22,8 +22,8 @@ app = create_app()
 def user_info():
     try:
         time_range = request.args.get('time_range', 'short_term')
-        user_info = get_user_info(time_range)
-        return render_template('profile.html', user_info=user_info, time_range=time_range)
+        user_profile = get_user_profile(time_range)
+        return render_template('profile.html', user_profile=user_profile, time_range=time_range)
     except Exception as e:
         return f'Error: {e}'
 

@@ -15,26 +15,31 @@ auth_manager = SpotifyOAuth(
 )
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-def get_user_info(time_range='short_term'):
+def get_user_profile(time_range):
+    user_info = get_user_info(time_range)
+    top_tracks = get_user_top_tracks(time_range)
+    top_artists = get_user_top_artists(time_range)
+
+    user_profile = {
+        'user':user_info,
+        'top_tracks':top_tracks,
+        'top_artists':top_artists
+    }
+    return user_profile
+
+def get_user_info(time_range):
     """ Get user's information"""
     user = sp.current_user()
-    user_profile = {
+    user_info = {
         'display_name':user['display_name'],
         'profile_image':user['images'][0]['url'] if user.get('images') else None,
         'follower_count':user['followers']['total'],
     }
-    top_tracks = get_user_top_tracks(time_range)
-    top_artists = get_user_top_artists(time_range)
-    user_info = {
-        'user':user_profile,
-        'top_tracks':top_tracks,
-        'top_artists':top_artists
-    }
     return user_info
 
-def get_user_top_tracks(time_range='short_term', limit=20):
+def get_user_top_tracks(time_range):
     """Get user's top tracks"""
-    results = sp.current_user_top_tracks(time_range=time_range, limit=limit)
+    results = sp.current_user_top_tracks(time_range=time_range)
     top_tracks = [
         {
             'name': item['name'],
@@ -45,9 +50,9 @@ def get_user_top_tracks(time_range='short_term', limit=20):
     ]
     return top_tracks
 
-def get_user_top_artists(time_range='short_term', limit=20):
+def get_user_top_artists(time_range):
     """Get user's top artists"""
-    results = sp.current_user_top_artists(time_range=time_range, limit=limit)
+    results = sp.current_user_top_artists(time_range=time_range)
     top_artists = [
         {
             'name': item['name'],
