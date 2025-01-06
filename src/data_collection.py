@@ -3,10 +3,11 @@ from collections import Counter
 
 # User Profile Functions
 def get_user_profile(time_range):
+    num_elems = 10
     user_info = get_user_info(time_range)
-    top_tracks = get_user_top_tracks(time_range)
-    top_artists = get_user_top_artists(time_range)
-    top_genres = get_user_top_genres(time_range)
+    top_tracks = get_user_top_tracks(time_range)[:num_elems]
+    top_artists = get_user_top_artists(time_range)[:num_elems]
+    top_genres = get_user_top_genres(time_range)[:num_elems]
 
     user_profile = {
         'user':user_info,
@@ -53,10 +54,12 @@ def get_user_top_artists(time_range):
     return top_artists
 
 def get_user_top_genres(time_range):
+    """ Get user's top genres"""
     top_artists = get_user_top_artists(time_range)
     genres = [genre for artist in top_artists for genre in artist['genres']]
     genre_counts = Counter(genres)
     top_genres = genre_counts.most_common(10)
+    top_genres = [genre[0] for genre in top_genres]
     return top_genres
 
 # Music Recommendation Functions

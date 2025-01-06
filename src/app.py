@@ -27,13 +27,13 @@ def user_info():
     except Exception as e:
         return f'Error: {e}'
 
-@app.route('/recommendations')
-def recommendations():
-    try:
-        recommended_tracks = get_user_recommendations()
-        return render_template('recommendations.html', recommended_tracks=recommended_tracks)
-    except Exception as e:
-        return f'Error: {e}'
+# @app.route('/recommendations')
+# def recommendations():
+#     try:
+#         recommended_tracks = get_user_recommendations()
+#         return render_template('recommendations.html', recommended_tracks=recommended_tracks)
+#     except Exception as e:
+#         return f'Error: {e}'
 
 if __name__ == '__main__':
     app.run()

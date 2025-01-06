@@ -3,128 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ user_profile['user']['display_name'] }}'s Profile</title>
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <title>Spotify User Profile</title>
     <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Google Fonts (Poppins for clean typography) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f7f7f7;
-            color: #333;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
         }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 30px;
+        header {
+            background-color: #1DB954;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid #0b6623;
         }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
+        h1 {
+            font-size: 2.5rem;
         }
-        .profile-header img {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            margin-right: 20px;
-        }
-        .profile-header h1 {
-            font-size: 2.5em;
-            font-weight: 600;
-            color: #333;
-        }
-        .profile-header p {
-            color: #777;
-            font-size: 1.2em;
-        }
-        .section-title {
-            font-size: 1.8em;
-            font-weight: 600;
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-        .btn {
-            padding: 10px 20px;
-            font-weight: 600;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
+        .time-range-btns button {
             margin: 5px;
-            transition: background-color 0.3s ease;
         }
-        .btn:hover {
-            background-color: #0056b3;
+        .active {
+            background-color: #1DB954 !important;
+            border-color: #0b6623 !important;
         }
-        .selected {
-            background-color: #28a745;
+        section {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+        }
+        ol, ul {
+            padding-left: 20px;
         }
         .list-group-item {
-            background-color: transparent;
-            border: none;
-            padding: 10px 0;
-            font-size: 1.1em;
-            color: #555;
+            display: flex;
+            flex-direction: column; /* Stack title and artist vertically */
+            padding: 10px; /* Adjust padding */
+        }
+        .list-group-item strong {
+            font-size: 1.2rem; /* Slightly larger font for track name */
         }
         .list-group-item span {
-            color: #888;
-            font-size: 0.9em;
+            font-size: 1rem; /* Standard size for artist name */
+            color: #b3b3b3; /* Light grey for artist name */
+        }
+        .list-group-item::before {
+            content: counter(item) ". ";
+            counter-increment: item;
+            margin-right: 8px;
+            color: #1DB954;
+            font-weight: bold;
+        }
+        ol {
+            counter-reset: item;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #1DB954;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Profile Header -->
-        <div class="profile-header">
-            <img src="{{ user_profile['user']['profile_image'] }}" alt="Profile Image">
-            <div>
-                <h1>{{ user_profile['user']['display_name'] }}</h1>
-                <p><i class="fas fa-users"></i> Followers: {{ user_profile['user']['follower_count'] }}</p>
+    <header>
+        <h1>Spotify User Profile</h1>
+    </header>
+
+    <main class="container mt-4">
+        <!-- User Information -->
+        <section class="text-center">
+            <div class="d-flex flex-column align-items-center">
+                <img src="{{ user_profile['user']['profile_image'] }}"
+                    alt="Profile Image"
+                    style="width: 150px; height: 150px; border-radius: 50%; margin-bottom: 15px;">
+                <h2 style="font-size: 1.8rem; font-weight: 700;">Welcome, {{ user_profile['user']['display_name'] }}!</h2>
+                <p style="font-size: 1.2rem; margin-top: 10px;">
+                    <strong>Followers:</strong> {{ user_profile['user']['follower_count'] }}
+                </p>
             </div>
-        </div>
+        </section>
 
         <!-- Time Range Selection -->
-        <div>
-            <a href="/?time_range=short_term" class="btn {% if time_range == 'short_term' %}selected{% endif %}">Last 4 weeks</a>
-            <a href="/?time_range=medium_term" class="btn {% if time_range == 'medium_term' %}selected{% endif %}">Last 6 months</a>
-            <a href="/?time_range=long_term" class="btn {% if time_range == 'long_term' %}selected{% endif %}">All-time</a>
+        <section>
+            <h3>Select Time Range:</h3>
+            <form method="GET" action="/" class="time-range-btns">
+                <button type="submit" name="time_range" value="short_term"
+                        class="btn btn-outline-light {% if time_range == 'short_term' %}active{% endif %}">
+                    Last 4 Weeks
+                </button>
+                <button type="submit" name="time_range" value="medium_term"
+                        class="btn btn-outline-light {% if time_range == 'medium_term' %}active{% endif %}">
+                    Last 6 Months
+                </button>
+                <button type="submit" name="time_range" value="long_term"
+                        class="btn btn-outline-light {% if time_range == 'long_term' %}active{% endif %}">
+                    All Time
+                </button>
+            </form>
+        </section>
+
+        <!-- Top Content Sections in Columns -->
+        <div class="row">
+            <!-- Top Tracks -->
+            <div class="col-md-4">
+                <section>
+                    <h3>Top Tracks</h3>
+                    <ol class="list-group">
+                        {% for track in user_profile['top_tracks'] %}
+                        <li class="list-group-item bg-dark text-white">
+                            <strong>{{ track['name'] }}</strong>
+                            <span>by {{ track['artist'] }}</span>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </section>
+            </div>
+
+            <!-- Top Artists -->
+            <div class="col-md-4">
+                <section>
+                    <h3>Top Artists</h3>
+                    <ol class="list-group">
+                        {% for artist in user_profile['top_artists'] %}
+                        <li class="list-group-item bg-dark text-white">{{ artist['name'] }}</li>
+                        {% endfor %}
+                    </ol>
+                </section>
+            </div>
+
+            <!-- Top Genres -->
+            <div class="col-md-4">
+                <section>
+                    <h3>Top Genres</h3>
+                    <ol class="list-group">
+                        {% for genre in user_profile['top_genres'] %}
+                        <li class="list-group-item bg-dark text-white">{{ genre }}</li>
+                        {% endfor %}
+                    </ol>
+                </section>
+            </div>
         </div>
+    </main>
 
-        <!-- Top Tracks -->
-        <div class="section-title">Top Tracks</div>
-        <ol class="list-group">
-            {% for track in user_profile['top_tracks'] %}
-                <li class="list-group-item">{{ loop.index }}. {{ track['name'] }} - {{ track['artist'] }} <span>({{ track['album'] }})</span></li>
-            {% endfor %}
-        </ol>
+    <footer>
+        <p>Made with ❤️ by George Mathew using Spotify API</p>
+    </footer>
 
-        <!-- Top Artists -->
-        <div class="section-title">Top Artists</div>
-        <ol class="list-group">
-            {% for artist in user_profile['top_artists'] %}
-                <li class="list-group-item">{{ loop.index }}. {{ artist['name'] }} <span>({{ artist['popularity'] }})</span></li>
-            {% endfor %}
-        </ol>
-
-        <!-- Top Genres -->
-        <div class="section-title">Top Genres</div>
-        <ol class="list-group">
-            {% for genre, count in user_profile['top_genres'] %}
-                <li class="list-group-item">{{ loop.index }}. {{ genre }} <span>({{ count }} tracks)</span></li>
-            {% endfor %}
-        </ol>
-    </div>
-
-    <!-- Bootstrap and jQuery JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
